@@ -25,6 +25,11 @@ public class UsuarioRepository : IUsuarioRepository
         return await _context.Usuario.FirstOrDefaultAsync(u => u.Id == id);
     }
 
+    public async Task<Usuario> GetByCPF(string cpf)
+    {
+        return await _context.Usuario.FirstOrDefaultAsync(u => u.CPF == cpf);
+    }
+
     public async Task<bool> UserExists(string CPF)
     {
         return await _context.Usuario.AnyAsync(u => u.CPF == CPF);
