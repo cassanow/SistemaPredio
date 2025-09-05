@@ -2,6 +2,7 @@
 using SistemaPredio.DTO;
 using SistemaPredio.Enum;
 using SistemaPredio.Interface;
+using SistemaPredio.Mapping;
 using SistemaPredio.Model;
 
 namespace SistemaPredio.Controller;
@@ -29,13 +30,8 @@ public class AuthController : Microsoft.AspNetCore.Mvc.Controller
         if(!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        if(!await _usuarioRepository.UserExists(usuario.CPF))
-            return Unauthorized("Usuario nao encontrado");
-        
-        if(usuario.CPF != login.CPF || usuario.Senha != login.Senha)
+        if(usuario == null || usuario.Senha != login.Senha)
             return Unauthorized("Usuario ou senha incorretos");
-        
-        Console.WriteLine($"Role do usuário: {usuario.Role}");
         
         var token =  _tokenService.GenerateToken(usuario);
         
@@ -45,19 +41,18 @@ public class AuthController : Microsoft.AspNetCore.Mvc.Controller
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Register(Usuario usuario)
+    public async Task<IActionResult> Register(UsuarioDTO usuarioDTO)
     {
         if(User.Identity.IsAuthenticated)
-            return Unauthorized();
-
-        if (!User.IsInRole("Admin"))
-           usuario.Role = Role.Morador;
+            return Unauthorized("Voce já esta autenticado");
             
         if(!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        if(await _usuarioRepository.UserExists(usuario.CPF))
+        if(await _usuarioRepository.UserExists(usuarioDTO.CPF))
             return BadRequest("Usuario já existe");
+        
+        var usuario = UsuarioMapping.ToUsuario(usuarioDTO);
 
         var user = await _usuarioRepository.Post(usuario);
         

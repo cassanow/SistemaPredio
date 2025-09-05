@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaPredio.DTO;
+using SistemaPredio.Enum;
 using SistemaPredio.Interface;
+using SistemaPredio.Mapping;
 using SistemaPredio.Model;
 
 namespace SistemaPredio.Controller;
@@ -25,6 +27,9 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
     {
         var usuarios = await _usuarioRepository.GetAll();
         
+        if(User.IsInRole("Morador"))
+            return Forbid("Voce nao possui permissao");
+        
         if (usuarios.Count == 0) 
             return NotFound("Nenhum usuário cadastrado");
         
@@ -37,12 +42,16 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
     public async Task<IActionResult> GetById(int id)
     {
         var usuario = await _usuarioRepository.GetById(id);
+        
+        if (usuario.Role != Role.Admin)
+            return Forbid("Voce nao possui permissao");
 
-        if (usuario == null)
+        if (!await _usuarioRepository.UserExists(usuario.CPF))
             return NotFound("Nenhum usuário encontrado");
         
         if(usuario.Id < 0)
             return BadRequest("O id informado é invalido");
+        
         
         return Ok(usuario);
     }
@@ -52,6 +61,9 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post(Usuario usuario)
     {
+        if (usuario.Role != Role.Admin)
+            return Forbid("Voce nao possui permissao");
+        
         if(!ModelState.IsValid)
             return BadRequest(ModelState);
 
@@ -68,6 +80,11 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Put(UsuarioDTO usuario)
     {
+        var user = UsuarioMapping.ToUsuario(usuario);
+        
+        if (user.Role != Role.Admin)
+            return Forbid("Voce nao possui permissao");
+        
         if(!ModelState.IsValid)
             return BadRequest(ModelState);
         
@@ -84,9 +101,12 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(Usuario usuario)
     {
+        if (usuario.Role != Role.Admin)
+            return Forbid("Voce nao possui permissao");
+        
         var usuarioDelete =  await _usuarioRepository.GetById(usuario.Id);
         
-        if(usuarioDelete == null) 
+        if(!await _usuarioRepository.UserExists(usuario.CPF)) 
             return NotFound("Usuario nao encontrado");
         
         await _usuarioRepository.Delete(usuarioDelete);
