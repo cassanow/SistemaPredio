@@ -3,5 +3,6 @@
 public enum Role
 {
     Admin,
-    Morador
+    Morador,
+    Sindico
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SistemaPredio.DTO;
 using SistemaPredio.Interface;
 using SistemaPredio.Model;
@@ -7,6 +8,7 @@ namespace SistemaPredio.Controller;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "Admin")]
 public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
 {
     private readonly IUsuarioRepository _usuarioRepository;

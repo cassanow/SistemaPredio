@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SistemaPredio.DTO;
+using SistemaPredio.Enum;
 using SistemaPredio.Interface;
 using SistemaPredio.Model;
 
@@ -34,6 +35,8 @@ public class AuthController : Microsoft.AspNetCore.Mvc.Controller
         if(usuario.CPF != login.CPF || usuario.Senha != login.Senha)
             return Unauthorized("Usuario ou senha incorretos");
         
+        Console.WriteLine($"Role do usuário: {usuario.Role}");
+        
         var token =  _tokenService.GenerateToken(usuario);
         
         return Ok(token);
@@ -44,6 +47,12 @@ public class AuthController : Microsoft.AspNetCore.Mvc.Controller
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register(Usuario usuario)
     {
+        if(User.Identity.IsAuthenticated)
+            return Unauthorized();
+
+        if (!User.IsInRole("Admin"))
+           usuario.Role = Role.Morador;
+            
         if(!ModelState.IsValid)
             return BadRequest(ModelState);
         

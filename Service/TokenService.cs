@@ -20,17 +20,17 @@ public class TokenService : ITokenService
     public TokenResponse GenerateToken(Usuario usuario)
     {
         
-        var issuer = _configuration["Jwt:Issuer"];
-        var audience = _configuration["Jwt:Audience"];
+        var issuer = _configuration["JWT:Issuer"];
+        var audience = _configuration["JWT:Audience"];
         var expiration = DateTime.Now.AddHours(2);
-
+        
         var claims = new[]
         {
             new Claim(ClaimTypes.Name, usuario.CPF),
-            new Claim(ClaimTypes.Role, usuario.Role.ToString())
+            new Claim(ClaimTypes.Role, usuario.Role.ToString()),
         };
-        
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
         var credentials =  new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken
@@ -49,5 +49,6 @@ public class TokenService : ITokenService
             Token = tokenString,
             Expiration = expiration
         };
+        
     }
 }

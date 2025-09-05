@@ -6,7 +6,6 @@ namespace SistemaPredio.Model;
 public class Usuario
 {
     [Key]
-    [StringLength(10, MinimumLength = 10)]
     public int Id { get; set; }
     
     [Required]
@@ -18,8 +17,7 @@ public class Usuario
     public string CPF { get; set; }
     
     [Required]
-    [MinLength(10)]
-    [MaxLength(100)]
+    [StringLength(100, MinimumLength = 6)]
     public string Senha { get; set; }
     
     public Role Role { get; set; }
