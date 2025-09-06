@@ -10,6 +10,6 @@ public interface IUsuarioRepository
     Task<Usuario> GetByCPF(string cpf);
     Task<bool> UserExists(string CPF);
     Task<Usuario> Post(Usuario usuario);
-    Task<UsuarioDTO> Put(UsuarioDTO usuario);
+    Task<Usuario> Put(Usuario usuario);
     Task Delete(Usuario usuario);
 }

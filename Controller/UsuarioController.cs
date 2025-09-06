@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using SistemaPredio.DTO;
 using SistemaPredio.Enum;
 using SistemaPredio.Interface;
@@ -26,9 +27,9 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
     public async Task<IActionResult> GetAll()
     {
         var usuarios = await _usuarioRepository.GetAll();
-        
-        if(User.IsInRole("Morador"))
-            return Forbid("Voce nao possui permissao");
+
+        if (User.IsInRole("Morador"))
+            return StatusCode(403, new { Mensagem = "Voce nao possui permissao" });
         
         if (usuarios.Count == 0) 
             return NotFound("Nenhum usuário cadastrado");
@@ -36,16 +37,16 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
         return Ok(usuarios);
     }
 
-    [HttpGet("GetById")]
+    [HttpGet("GetByCPF")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetByCPF(string cpf)
     {
-        var usuario = await _usuarioRepository.GetById(id);
+        var usuario = await _usuarioRepository.GetByCPF(cpf);
         
-        if (usuario.Role != Role.Admin)
-            return Forbid("Voce nao possui permissao");
-
+        if (User.IsInRole("Morador"))
+            return StatusCode(403, new { Mensagem = "Voce nao possui permissao" });
+        
         if (!await _usuarioRepository.UserExists(usuario.CPF))
             return NotFound("Nenhum usuário encontrado");
         
@@ -61,8 +62,8 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post(Usuario usuario)
     {
-        if (usuario.Role != Role.Admin)
-            return Forbid("Voce nao possui permissao");
+        if (User.IsInRole("Morador"))
+            return StatusCode(403, new { Mensagem = "Voce nao possui permissao" });
         
         if(!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -78,35 +79,33 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
     [HttpPut("Put")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Put(UsuarioDTO usuario)
+    public async Task<IActionResult> Put(Usuario usuario)
     {
-        var user = UsuarioMapping.ToUsuario(usuario);
-        
-        if (user.Role != Role.Admin)
-            return Forbid("Voce nao possui permissao");
-        
+        if (User.IsInRole("Morador"))
+            return StatusCode(403, new { Mensagem = "Voce nao possui permissao" });
+
         if(!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        if (!await _usuarioRepository.UserExists(usuario.CPF)) 
+        if (usuario == null) 
             return  NotFound("Usuario não encontrado");
         
         var usuarioUpdated = await _usuarioRepository.Put(usuario);
         
-        return Accepted(usuarioUpdated);
+        return Ok(usuarioUpdated);
     }
 
     [HttpDelete("Delete")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete(Usuario usuario)
+    public async Task<IActionResult> Delete(string cpf)
     {
-        if (usuario.Role != Role.Admin)
-            return Forbid("Voce nao possui permissao");
+        if (User.IsInRole("Morador"))
+            return StatusCode(403, new { Mensagem = "Voce nao possui permissao" });
+
+        var usuarioDelete = await _usuarioRepository.GetByCPF(cpf);
         
-        var usuarioDelete =  await _usuarioRepository.GetById(usuario.Id);
-        
-        if(!await _usuarioRepository.UserExists(usuario.CPF)) 
+        if(usuarioDelete == null) 
             return NotFound("Usuario nao encontrado");
         
         await _usuarioRepository.Delete(usuarioDelete);

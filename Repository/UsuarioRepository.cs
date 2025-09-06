@@ -42,7 +42,7 @@ public class UsuarioRepository : IUsuarioRepository
         return usuario;
     }
 
-    public async Task<UsuarioDTO> Put(UsuarioDTO usuario)
+    public async Task<Usuario> Put(Usuario usuario)
     {
         _context.Entry(usuario).State = EntityState.Modified;
         await _context.SaveChangesAsync();
