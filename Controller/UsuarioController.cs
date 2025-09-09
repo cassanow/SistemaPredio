@@ -50,10 +50,6 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
         if (!await _usuarioRepository.UserExists(usuario.CPF))
             return NotFound("Nenhum usuário encontrado");
         
-        if(usuario.Id < 0)
-            return BadRequest("O id informado é invalido");
-        
-        
         return Ok(usuario);
     }
 

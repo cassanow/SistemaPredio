@@ -71,6 +71,7 @@ builder.Services.AddDbContext<AppDbContext>(
 
 builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<IMoradorRepository, MoradorRepository>();
 
 var app = builder.Build();
 
