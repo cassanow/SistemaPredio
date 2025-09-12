@@ -26,4 +26,5 @@ public class Morador
     
     [JsonIgnore]
     public List<Aluguel> Alugueis { get; set; }
+    
 }

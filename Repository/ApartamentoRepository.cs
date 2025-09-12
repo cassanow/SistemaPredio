@@ -16,12 +16,16 @@ public class ApartamentoRepository : IApartamentoRepository
     
     public async Task<List<Apartamento>> GetAll()
     {
-        return await _context.Apartamento.ToListAsync();
+        return await _context.Apartamento.Include(a => a.Morador).Include(a => a.Alugueis).ToListAsync();
     }
 
     public async Task<Apartamento> GetByCPF(string cpf)
     {
-        return await _context.Apartamento.Where(a => a.cpfMorador == cpf).FirstOrDefaultAsync();
+        return await _context.Apartamento
+            .Include(a => a.Morador)
+            .Include(a => a.Alugueis)
+            .Where(a => a.cpfMorador == cpf)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<Apartamento> GetByCodigo(string codigo)

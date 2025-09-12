@@ -11,6 +11,8 @@ public class Aluguel
     
     [ForeignKey(nameof(Apartamento))] 
     public string codigoApartamento { get; set; }
+    
+    [JsonIgnore]
     public Apartamento Apartamento { get; set; }
     
     [ForeignKey(nameof(Morador))]
