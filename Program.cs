@@ -73,6 +73,7 @@ builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IMoradorRepository, MoradorRepository>();
 builder.Services.AddTransient<IApartamentoRepository, ApartamentoRepository>();
+builder.Services.AddTransient<IAluguelRepository, AluguelRepository>();
 
 var app = builder.Build();
 

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using SistemaPredio.Enum;
 
 namespace SistemaPredio.Model;
 
@@ -24,4 +25,6 @@ public class Aluguel
     public decimal Preco { get; set; }
     
     public DateTime DataVencimento { get; set; }
+    
+    public Pago Pago { get; set; }
 }

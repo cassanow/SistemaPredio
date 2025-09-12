@@ -80,7 +80,7 @@ public class ApartamentoController : Microsoft.AspNetCore.Mvc.Controller
         
         await _apartamentoRepository.Put(apartamento);
         
-        return Ok(apartamento);
+        return Created("Apartamento", apartamento);
     }
 
     [HttpDelete("Delete")]
