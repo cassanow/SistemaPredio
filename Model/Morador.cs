@@ -24,5 +24,6 @@ public class Morador
     [JsonIgnore]
     public Usuario Usuario { get; set; }
     
+    [JsonIgnore]
     public List<Aluguel> Alugueis { get; set; }
 }

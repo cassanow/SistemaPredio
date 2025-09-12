@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SistemaPredio.Model;
 
@@ -15,6 +16,8 @@ public class Aluguel
     [ForeignKey(nameof(Morador))]
     [StringLength(11, MinimumLength = 11)]
     public string? cpfMorador { get; set; }
+    
+    [JsonIgnore]
     public Morador Morador { get; set; }
     public decimal Preco { get; set; }
     
