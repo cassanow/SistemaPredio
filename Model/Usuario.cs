@@ -9,8 +9,8 @@ public class Usuario
     public int Id { get; set; }
     
     [Required]
-    [MaxLength(100)]
-    public string Nome { get; set; }
+    [EmailAddress]
+    public string Email { get; set; }
     
     [Required]
     [StringLength(11, MinimumLength = 11)]

@@ -5,8 +5,8 @@ namespace SistemaPredio.DTO;
 public class UsuarioDTO
 {
     [Required]
-    [MaxLength(100)]
-    public string Nome { get; set; }
+    [EmailAddress]
+    public string Email { get; set; }
     
     [Required]
     [StringLength(11, MinimumLength = 11)]

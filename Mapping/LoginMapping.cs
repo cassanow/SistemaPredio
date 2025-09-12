@@ -9,7 +9,7 @@ public class LoginMapping
     {
         return new Usuario
         {
-            CPF = login.CPF,
+            Email = login.Email,
             Senha = login.Senha,
         };
     }
@@ -18,7 +18,7 @@ public class LoginMapping
     {
         return new LoginDTO
         {
-            CPF = usuario.CPF,
+            Email = usuario.Email,
             Senha = usuario.Senha,
         };
     }

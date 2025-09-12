@@ -2,8 +2,6 @@
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using SistemaPredio.DTO;
-using SistemaPredio.Enum;
 using SistemaPredio.Interface;
 using SistemaPredio.Model;
 
@@ -28,6 +26,7 @@ public class TokenService : ITokenService
         {
             new Claim(ClaimTypes.Name, usuario.CPF),
             new Claim(ClaimTypes.Role, usuario.Role.ToString()),
+            new Claim("id", usuario.Id.ToString()),
         };
             
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));

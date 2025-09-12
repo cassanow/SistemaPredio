@@ -25,7 +25,7 @@ public class AuthController : Microsoft.AspNetCore.Mvc.Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login(LoginDTO login)
     {
-        var usuario = await _usuarioRepository.GetByCPF(login.CPF);
+        var usuario = await _usuarioRepository.GetByEmail(login.Email);
         
         if(!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -49,10 +49,10 @@ public class AuthController : Microsoft.AspNetCore.Mvc.Controller
         if(!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        if(await _usuarioRepository.UserExists(usuarioDTO.CPF))
-            return BadRequest("Usuario já existe");
-        
         var usuario = UsuarioMapping.ToUsuario(usuarioDTO);
+        
+        if(await _usuarioRepository.UserExists(usuario.CPF))
+            return BadRequest("Usuario já existe");
 
         var user = await _usuarioRepository.Post(usuario);
         

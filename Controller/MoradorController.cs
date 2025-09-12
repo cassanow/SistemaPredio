@@ -61,11 +61,13 @@ public class MoradorController : Microsoft.AspNetCore.Mvc.Controller
     [Authorize]
     public async Task<IActionResult> Post(MoradorDTO dadosMorador)
     { 
+        
         var usuarioId = int.Parse(User.FindFirst("id").Value);
         
         var usuario = await _usuarioRepository.GetById(usuarioId);
         if (usuario == null)
             return NotFound("Nenhum usuario encontrado");
+        
 
         var morador = new Morador
         {
@@ -85,6 +87,7 @@ public class MoradorController : Microsoft.AspNetCore.Mvc.Controller
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Put(MoradorDTO dadosMorador)
     {
+        
         var usuarioId = int.Parse(User.FindFirst("id").Value);
 
         var morador = await _moradorRepository.GetByUsuarioId(usuarioId);
@@ -96,7 +99,6 @@ public class MoradorController : Microsoft.AspNetCore.Mvc.Controller
         
         morador.Nome = dadosMorador.Nome;
         morador.Telefone = dadosMorador.Telefone;
-        morador.CPF = dadosMorador.CPF;
 
         var moradorUpdated = await _moradorRepository.Put(morador);
         

@@ -8,6 +8,8 @@ public interface IUsuarioRepository
     Task <List<Usuario>> GetAll();
     Task<Usuario> GetById(int id);
     Task<Usuario> GetByCPF(string cpf);
+    
+    Task<Usuario> GetByEmail(string email);
     Task<bool> UserExists(string CPF);
     Task<Usuario> Post(Usuario usuario);
     Task<Usuario> Put(Usuario usuario);

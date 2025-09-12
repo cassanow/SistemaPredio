@@ -10,7 +10,7 @@ public class UsuarioMapping
     {
         return new Usuario
         {
-            Nome = usuarioDTO.Nome,
+            Email = usuarioDTO.Email,
             Senha = usuarioDTO.Senha,
             CPF = usuarioDTO.CPF,
             Role = Role.Morador,
@@ -21,7 +21,7 @@ public class UsuarioMapping
     {
         return new UsuarioDTO
         {
-            Nome = usuario.Nome,
+            Email = usuario.Email,
             Senha = usuario.Senha,
             CPF = usuario.CPF,
         };

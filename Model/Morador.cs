@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SistemaPredio.Model;
 
@@ -19,6 +20,8 @@ public class Morador
     
     [ForeignKey(nameof(Usuario))]
     public int UsuarioId { get; set; }
+    
+    [JsonIgnore]
     public Usuario Usuario { get; set; }
     
     public List<Aluguel> Alugueis { get; set; }
