@@ -6,8 +6,7 @@ namespace SistemaPredio.Database;
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {}
-
-    public DbSet<Admin> Admin { get; set; }
+    
     public DbSet<Aluguel> Aluguel { get; set; }
     public DbSet<Apartamento> Apartamento { get; set; }
     public DbSet<Morador> Morador { get; set; }
@@ -60,10 +59,5 @@ public class AppDbContext : DbContext
             .HasForeignKey(aluguel => aluguel.codigoApartamento)
             .OnDelete(DeleteBehavior.Cascade);
         
-        modelBuilder.Entity<Admin>()
-            .HasOne(a => a.Usuario)
-            .WithOne()
-            .HasForeignKey<Admin>(a => a.UsuarioId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }
