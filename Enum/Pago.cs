@@ -2,6 +2,6 @@
 
 public enum Pago
 {
-    Sim,
-    Nao
+   Nao,
+   Sim
 }
