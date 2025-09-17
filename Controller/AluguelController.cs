@@ -59,6 +59,7 @@ public class AluguelController : Microsoft.AspNetCore.Mvc.Controller
         await _aluguelRepository.Post(aluguel);
         
         return Created("Aluguel", aluguel);
+        
     }
 
     [HttpPut("Put")]
