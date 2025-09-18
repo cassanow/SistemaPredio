@@ -23,4 +23,5 @@ public class AluguelService : IAluguelService
         var juros = aluguel.Preco * diasAtraso * taxaDiaria;
         return juros;
     }
+
 }
