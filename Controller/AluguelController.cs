@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaPredio.DTO;
+using SistemaPredio.Enum;
 using SistemaPredio.Interface;
 using SistemaPredio.Mapping;
 using SistemaPredio.Model;
+using SistemaPredio.Repository;
 
 namespace SistemaPredio.Controller;
 
@@ -12,10 +14,12 @@ namespace SistemaPredio.Controller;
 public class AluguelController : Microsoft.AspNetCore.Mvc.Controller
 {
     private readonly IAluguelRepository _aluguelRepository;
+    private readonly IAluguelService _aluguelService;   
 
-    public AluguelController(IAluguelRepository aluguelRepository)
+    public AluguelController(IAluguelRepository aluguelRepository,  IAluguelService aluguelService)
     {
         _aluguelRepository = aluguelRepository;
+        _aluguelService = aluguelService;
     }
     
     [HttpGet("GetAll")]
@@ -61,6 +65,32 @@ public class AluguelController : Microsoft.AspNetCore.Mvc.Controller
         return Created("Aluguel", aluguel);
         
     }
+
+    [HttpPost("Pagamento")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Pagamento(string cpf)
+    {
+        var aluguel = await _aluguelRepository.GetByCPF(cpf);
+        if(aluguel == null)
+            return NotFound("Nenhum aluguel encontrado");
+        
+        if(aluguel.Pago == Pago.Sim)
+            return BadRequest("Esse aluguel já foi pago");
+
+        var precoFinal =  _aluguelService.JurosAluguel(aluguel);
+
+        aluguel.Pago = Pago.Sim;
+        aluguel.DataPagamento = DateTime.Now;
+        await _aluguelRepository.Put(aluguel);
+
+        return Ok(new
+        {
+            Mensagem = "Pagamento realizado com sucesso",
+            ValorOriginal= aluguel.Preco,
+            ValorPago =  precoFinal,
+        });
+    }  
 
     [HttpPut("Put")]
     [ProducesResponseType(StatusCodes.Status200OK)]

@@ -13,6 +13,7 @@ public class AluguelMapping
             cpfMorador = dto.cpfMorador,
             codigoApartamento = dto.codigoApartamento,
             DataVencimento = dto.DataVencimento,
+            DataPagamento = dto.DataPagamento,
             Pago = dto.Pago,
             Preco = dto.Preco,
         };
@@ -25,6 +26,7 @@ public class AluguelMapping
             cpfMorador = aluguel.cpfMorador,
             codigoApartamento = aluguel.codigoApartamento,
             DataVencimento = aluguel.DataVencimento,
+            DataPagamento = aluguel.DataPagamento,      
             Pago = aluguel.Pago,
             Preco = aluguel.Preco,
         };

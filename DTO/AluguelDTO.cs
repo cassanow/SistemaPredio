@@ -13,5 +13,7 @@ public class AluguelDTO
     
     public DateTime DataVencimento  { get; set; }
     
+    public DateTime DataPagamento { get; set; }
+    
     public Pago Pago { get; set; }
 }

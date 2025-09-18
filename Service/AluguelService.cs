@@ -18,10 +18,11 @@ public class AluguelService : IAluguelService
         var diasAtraso = (aluguel.DataPagamento - aluguel.DataVencimento).Days;
         const decimal taxaDiaria = 0.005m;
 
-        if (diasAtraso > 0) return aluguel.Preco;
+        if (diasAtraso <= 0) return aluguel.Preco;
         
         var juros = aluguel.Preco * diasAtraso * taxaDiaria;
-        return juros;
+        var novoAluguel = aluguel.Preco + juros;
+        return novoAluguel;
     }
 
 }
